@@ -1,5 +1,6 @@
-import  React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRetweet, faHeart, faEllipsisH, faReply } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +23,19 @@ function Tweet({ tweet }) {
         </div>
     );
 }
+Tweet.propTypes = {
+    tweet: PropTypes.shape({
+        message: PropTypes.string.isRequired,
+        gravatar: PropTypes.string,
+        timestamp: PropTypes.string.isRequired,
+        retweets: PropTypes.number,
+        likes: PropTypes.number,
+        author: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            handle: PropTypes.string.isRequired,
+        })
+    })
+}
 
 function Avatar({ hash }) {
     let url = `https://www.gravatar.com/avatar/${ hash ? hash : "nothing"}`;
@@ -33,6 +47,9 @@ function Avatar({ hash }) {
         />
     );
 }
+Avatar.propTypes = {
+    hash: PropTypes.string
+}
 
 function NameWithHandle({ author }) {
     const { name, handle } = author;
@@ -43,6 +60,12 @@ function NameWithHandle({ author }) {
         </span>
     );
 }
+NameWithHandle.propTypes = {
+    author: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        handle: PropTypes.string.isRequired
+    })
+}
 
 function Time({ time }) {
     const timePassed = moment(time).fromNow();
@@ -52,8 +75,14 @@ function Time({ time }) {
         </span>
     );
 }
+Time.propTypes = {
+    time: PropTypes.string.isRequired
+}
 
 const Message = ({ text }) => <div className="message">{text}</div>
+Message.propTypes = {
+    text: PropTypes.string.isRequired
+}
 
 const ReplyButton = () => (
     <span className="reply-button">
@@ -67,6 +96,9 @@ const LikeButton = ({ count }) => (
         <span className="like-count">{count ? count : null}</span>
     </span>
 );
+LikeButton.propTypes = {
+    count: PropTypes.number
+}
 
 function getRetweetCount(count) {
     if (count > 0) {
@@ -79,6 +111,9 @@ function getRetweetCount(count) {
         return null;
     }
 }
+getRetweetCount.propTypes = {
+    count: PropTypes.number
+}
 
 const RetweetButton = ({ count }) => (
     <span className="retweet-button">
@@ -86,7 +121,9 @@ const RetweetButton = ({ count }) => (
         {getRetweetCount(count)}
     </span>
 );
-
+RetweetButton.propTypes = {
+    count: PropTypes.number
+}
 const MoreOptionsButton = () => (
     <span className="more-options-button">
         <FontAwesomeIcon icon={faEllipsisH}/>
